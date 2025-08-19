@@ -31,8 +31,8 @@ function ChatWindow({ onClose }: { onClose: () => void }) {
     const next = [...messages, { role: "user", content: text } as Msg];
     setMessages(next);
     setBusy(true);
-    try {
-      const res = await fetch("/api/chat", {
+    try {      
+      const res = await fetch("${API_BASE}/api/chat", {      
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
