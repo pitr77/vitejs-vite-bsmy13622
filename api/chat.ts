@@ -1,14 +1,17 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // CORS headers – povoliť všetkým doménam a OPTIONS požiadavkám
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
+  // Najprv spracuj preflight request (OPTIONS)
   if (req.method === 'OPTIONS') {
-    // preflight request – žiadna odpoveď okrem statusu
     return res.status(204).end();
+  }
+
+  // Povolené len POST požiadavky
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   // teraz až kontroluj POST
