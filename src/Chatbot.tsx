@@ -32,12 +32,15 @@ function ChatWindow({ onClose }: { onClose: () => void }) {
     setMessages(next);
     setBusy(true);
     try {      
-      const res = await fetch("${API_BASE}/api/chat", {      
+      const API_BASE =
+      (import.meta.env.VITE_API_BASE as string | undefined)?.replace(/\/$/, "") || "";
+
+      const res = await fetch(`${API_BASE}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: [
-            { role: "system", content: "Si užitočný asistent elektrikára. Odpovedaj stručne a zrozumiteľne, v slovenčine. Ak sa pýtajú na ceny, uveď, že sú orientačné." },
+            { role: "system", content: "Si užitočný asistent elektrikára. Odpovedaj stručne po slovensky." },
             ...next,
           ],
         }),
