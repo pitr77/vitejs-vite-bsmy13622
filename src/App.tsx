@@ -8,7 +8,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 
-import { ChatFab } from './Chatbot';
+//import { ChatFab } from './Chatbot';
 
 // -----------------------------------------------------
 // Prezentácia elektrikára + samostatná stránka Kalkulátor
@@ -1025,7 +1025,7 @@ export default function App() {
         {/* ⇦ nová stránka */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      <ChatFab />
+      
     </HashRouter>
   );
 }
