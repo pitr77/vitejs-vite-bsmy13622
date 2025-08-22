@@ -65,75 +65,83 @@ function roundUpToList(x: number, list: number[]) {
   return list[list.length - 1];
 }
 
-// ------------------------- UI: Navbar -------------------------
+
+// ------------------------- UI: Navbar (s hamburgerom) -------------------------
+
+
 function Navbar() {
   const loc = useLocation();
-  const onHome = loc.pathname === '/';
+  const onHome = loc.pathname === "/";
+  const [open, setOpen] = useState(false);
 
   const scrollToId = (id: string) => {
-    if (!onHome) return; // scroll funguje len na domovskej stránke
-    document
-      .getElementById(id)
-      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!onHome) return;
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setOpen(false); // zavri menu po kliknutí
   };
 
   return (
     <header className="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-emerald-100">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2" aria-label="Domov">
-          <span className="h-8 w-8 rounded-xl bg-emerald-600 text-white grid place-content-center font-bold">
-            E
-          </span>
-          <span className="font-semibold">Elektro servis & montáž</span>
-        </Link>
-        <nav className="hidden md:flex gap-6 text-sm items-center">
-          {onHome ? (
-            <>
-              {/* Tieto položky len scrollujú na sekcie Domov stránky */}
-              <button
-                onClick={() => scrollToId('sluzby')}
-                className="hover:text-emerald-700"
-              >
-                Služby
-              </button>
-              <button
-                onClick={() => scrollToId('galeria')}
-                className="hover:text-emerald-700"
-              >
-                Galéria
-              </button>
-              <button
-                onClick={() => scrollToId('cennik')}
-                className="hover:text-emerald-700"
-              >
-                Cenník
-              </button>
-              <button
-                onClick={() => scrollToId('kontakt')}
-                className="hover:text-emerald-700"
-              >
-                Kontakt
-              </button>
-            </>
-          ) : null}
-          {/* Link na samostatnú stránku kalkulátora */}
-          <Link
-            to="/kalkulator"
-            className="px-3 py-1.5 rounded-xl border border-slate-300 hover:border-emerald-400"
-          >
-            Kalkulátor
+      <div className="max-w-6xl mx-auto px-4 py-3">
+        <div className="flex items-center justify-between">
+          {/* Logo / názov */}
+          <Link to="/" className="flex items-center gap-2" aria-label="Domov" onClick={() => setOpen(false)}>
+            <span className="h-8 w-8 rounded-xl bg-emerald-600 text-white grid place-content-center font-bold">E</span>
+            <span className="font-semibold">Elektro servis &amp; montáž</span>
           </Link>
-          <Link
-            to="/cena"
-            className="px-3 py-1.5 rounded-xl border border-slate-300 hover:border-emerald-400"
+
+          {/* Desktop menu */}
+          <nav className="hidden md:flex gap-6 text-sm items-center">
+            {onHome ? (
+              <>
+                <button onClick={() => scrollToId("sluzby")} className="hover:text-emerald-700">Služby</button>
+                <button onClick={() => scrollToId("galeria")} className="hover:text-emerald-700">Galéria</button>
+                <button onClick={() => scrollToId("cennik")} className="hover:text-emerald-700">Cenník</button>
+                <button onClick={() => scrollToId("kontakt")} className="hover:text-emerald-700">Kontakt</button>
+              </>
+            ) : null}
+            <Link to="/cena" className="px-3 py-1.5 rounded-xl border border-slate-300 hover:border-emerald-400">Cenová kalkulácia</Link>
+            {/*<Link to="/kalkulator" className="px-3 py-1.5 rounded-xl border border-slate-300 hover:border-emerald-400">Kalkulátor</Link>*/}
+            
+          </nav>
+
+          {/* Hamburger (mobil) */}
+          <button
+            className="md:hidden inline-flex items-center justify-center rounded-lg p-2 border border-slate-300 hover:border-emerald-400"
+            aria-label="Menu"
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
           >
-            Cenová kalkulácia
-          </Link>
-        </nav>
+            {/* jednoduchá ikonka */}
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Mobilné rozbalovacie menu */}
+        {open && (
+          <div className="md:hidden mt-3 pb-2 border-t border-emerald-100">
+            <nav className="flex flex-col gap-2 pt-3 text-sm">
+              {onHome ? (
+                <>
+                  <button onClick={() => scrollToId("sluzby")} className="text-left px-2 py-2 rounded-lg hover:bg-emerald-50">Služby</button>
+                  <button onClick={() => scrollToId("galeria")} className="text-left px-2 py-2 rounded-lg hover:bg-emerald-50">Galéria</button>
+                  <button onClick={() => scrollToId("cennik")} className="text-left px-2 py-2 rounded-lg hover:bg-emerald-50">Cenník</button>
+                  <button onClick={() => scrollToId("kontakt")} className="text-left px-2 py-2 rounded-lg hover:bg-emerald-50">Kontakt</button>
+                </>
+              ) : null}
+              <Link to="/kalkulator" onClick={() => setOpen(false)} className="px-2 py-2 rounded-lg hover:bg-emerald-50">Kalkulátor</Link>
+              <Link to="/cena" onClick={() => setOpen(false)} className="px-2 py-2 rounded-lg hover:bg-emerald-50">Cenová kalkulácia</Link>
+            </nav>
+          </div>
+        )}
       </div>
     </header>
   );
 }
+
+
 
 // ------------------- Samostatný modul: Kalkulátor -------------------
 function Calculator() {
