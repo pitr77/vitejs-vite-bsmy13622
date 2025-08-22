@@ -767,7 +767,7 @@ function HomePage() {
                 to="/kalkulator"
                 className="px-5 py-3 rounded-xl bg-emerald-600 text-white shadow hover:bg-emerald-700"
               >
-                Kalkulátor úbytku
+                Kalkulátor úbytku napätia
               </Link>
               <button
                 onClick={() =>
